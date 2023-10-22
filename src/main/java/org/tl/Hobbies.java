@@ -55,7 +55,7 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return The most popular hobby.
      */
-    public static String findMostPopularHobby(String filePath) {
+    public static List<String> findMostPopularHobby(String filePath) {
         return null;
     }
 
@@ -65,7 +65,7 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return The least popular hobby.
      */
-    public static String findLeastPopularHobby(String filePath) {
+    public static List<String> findLeastPopularHobby(String filePath) {
         return null;
     }
 
