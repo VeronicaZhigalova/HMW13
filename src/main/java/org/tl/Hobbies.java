@@ -1,11 +1,7 @@
 package org.tl;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Hobbies {
 
@@ -15,7 +11,7 @@ public class Hobbies {
      * @param filePath The path to the file to read.
      * @return A list of lines from the file.
      */
-    public static List<String> createListFromFile(String filePath) {
+    public List<String> createListFromFile(String filePath) {
         return null;
     }
 
@@ -25,7 +21,7 @@ public class Hobbies {
      * @param filePath The path to the file to read.
      * @return A map where each person's name is associated with a list of their hobbies.
      */
-    public static Map<String, List<String>> createDictionary(String filePath) {
+    public Map<String, List<String>> createDictionary(String filePath) {
         return null;
     }
 
@@ -35,7 +31,7 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return A list of people with the most hobbies.
      */
-    public static List<String> findPersonWithMostHobbies(String filePath) {
+    public List<String> findPersonWithMostHobbies(String filePath) {
         return null;
     }
 
@@ -45,7 +41,7 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return A list of people with the fewest hobbies.
      */
-    public static List<String> findPersonWithLeastHobbies(String filePath) {
+    public List<String> findPersonWithLeastHobbies(String filePath) {
         return null;
     }
 
@@ -55,7 +51,7 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return The most popular hobby.
      */
-    public static List<String> findMostPopularHobby(String filePath) {
+    public List<String> findMostPopularHobby(String filePath) {
         return null;
     }
 
@@ -65,23 +61,24 @@ public class Hobbies {
      * @param filePath The path to the file containing hobby data.
      * @return The least popular hobby.
      */
-    public static List<String> findLeastPopularHobby(String filePath) {
+    public List<String> findLeastPopularHobby(String filePath) {
         return null;
     }
 
     /**
      * Write correct database to the csv file
-     *
+     * <p>
      * Since this is a csv file, then the output should be like:
      * Name,Hobbies
      * Bob,skiing
      * Alice,dancing-programming
-     *
+     * <p>
      * Hobbies have to be sorted in alphabetic order
-     * @param filePath The path to the file containing hobby data
+     *
+     * @param filePath    The path to the file containing hobby data
      * @param fileToWrite Path to the new file with correct data
      */
-    public static void writeCorrectedDatabase(String filePath, String fileToWrite) {
+    public void writeCorrectedDatabase(String filePath, String fileToWrite) {
 
     }
 }
