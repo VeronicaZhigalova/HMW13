@@ -38,22 +38,25 @@ public class Hobbies {
      */
     public Map<String, List<String>> createDictionary(String filePath) {
         Map<String, List<String>> result = new HashMap<>();
+
         try {
             FileReader fileReader = new FileReader(filePath);
             Scanner scanner = new Scanner(fileReader);
-            while (scanner.hasNextLine()) {
+            createListFromFile(filePath);
                 String line = scanner.nextLine();
                 String[] parts = line.split(":");
                 String name = parts[0].trim();
                 String[] hobbies = parts[1].split(",");
                 List<String> hobbyList = new ArrayList<>(Arrays.asList(hobbies));
-                result.put(name, hobbyList);
-            }
+                result.put(name,hobbyList);
+
             scanner.close();
         } catch (FileNotFoundException ex) {
             throw new RuntimeException("File not found:" + filePath);
         }
         return result;
+
+
     }
 
 
@@ -65,16 +68,19 @@ public class Hobbies {
      */
     public List<String> findPersonWithMostHobbies(String filePath) {
         Map<String, List<String>> dictionary = createDictionary(filePath);
-        int maxHobbies = 0;
-        String result = null;
+        int maxHobbies = 1;
+        List <String> result = new ArrayList<>();
         for (String name : dictionary.keySet()) {
             int hobbiesCount = dictionary.get(name).size();
             if (hobbiesCount > maxHobbies) {
                 maxHobbies = hobbiesCount;
-                result = name;
+                result.clear();
+                result.add(name);
+            } else if (hobbiesCount == maxHobbies){
+                result.add(name);
             }
         }
-        return Collections.singletonList(result);
+        return result;
     }
 
 
@@ -87,15 +93,18 @@ public class Hobbies {
     public List<String> findPersonWithLeastHobbies(String filePath) {
         Map<String, List<String>> dictionary = createDictionary(filePath);
         int minHobbies = 1;
-        String result = null;
+        List <String> result = new ArrayList<>();
         for (String name : dictionary.keySet()) {
             int hobbiesCount = dictionary.get(name).size();
-            if (!(hobbiesCount > minHobbies)) {
+            if (hobbiesCount < minHobbies) {
                 minHobbies = hobbiesCount;
-                result = name;
+                result.clear();
+                result.add(name);
+            } else if (hobbiesCount == minHobbies){
+                result.add(name);
             }
         }
-        return Collections.singletonList(result);
+        return result;
     }
 
 
@@ -106,21 +115,22 @@ public class Hobbies {
      * @return The most popular hobby.
      */
     public List<String> findMostPopularHobby(String filePath) {
+
         Map<String, List<String>> dictionary = createDictionary(filePath);
-        createDictionary(filePath);
-        Map<String, String> hobbyCount = new HashMap<>();
+        Map<String, Integer> hobbyCount = new HashMap<>();
+
 
         for (List<String> hobbies : dictionary.values()) {
             for (String hobby : hobbies) {
-                hobbyCount.put(hobby, hobbyCount.getOrDefault(hobby, String.valueOf(0)) + 1);
+                hobbyCount.put(hobby,hobbyCount.getOrDefault(hobby,0)+1);
             }
         }
 
-        int maxCount = 1;
+        int maxCount = 0;
         List<String> result = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : hobbyCount.entrySet()) {
-            int count = Integer.parseInt(entry.getValue());
+        for (Map.Entry<String, Integer> entry : hobbyCount.entrySet()) {
+            int count = entry.getValue();
 
             if (count > maxCount) {
                 maxCount = count;
@@ -142,21 +152,21 @@ public class Hobbies {
      * @return The least popular hobby.
      */
     public List<String> findLeastPopularHobby(String filePath) {
+
         Map<String, List<String>> dictionary = createDictionary(filePath);
-        createDictionary(filePath);
-        Map<String, String> hobbyCount = new HashMap<>();
+        Map<String, Integer> hobbyCount = new HashMap<>();
 
         for (List<String> hobbies : dictionary.values()) {
             for (String hobby : hobbies) {
-                hobbyCount.put(hobby, hobbyCount.getOrDefault(hobby, String.valueOf(0)) + 1);
+                hobbyCount.put(hobby,hobbyCount.getOrDefault(hobby,0)+1);
             }
         }
 
         int minCount = 1;
         List<String> result = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : hobbyCount.entrySet()) {
-            int count = Integer.parseInt(entry.getValue());
+        for (Map.Entry<String, Integer> entry : hobbyCount.entrySet()) {
+            int count = entry.getValue();
 
             if (count < minCount) {
                 minCount = count;
