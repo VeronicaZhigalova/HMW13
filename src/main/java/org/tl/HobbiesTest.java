@@ -35,14 +35,24 @@ public class HobbiesTest {
     void testCreateDictionary() {
         Map<String, List<String>> actualResult = hobbies.createDictionary(testFilePath);
         Map<String, List<String>> expectedResult = new HashMap<>();
-        expectedResult.put("Sophia", Arrays.asList("Traveling"));
+        expectedResult.put("Olivia", Arrays.asList("Traveling"));
+        expectedResult.put("Aiden", Arrays.asList("Skiing"));
+        expectedResult.put("Lucas", Arrays.asList("Cycling"));
+        expectedResult.put("Isabella", Arrays.asList("Hiking"));
+        expectedResult.put("Jackson", Arrays.asList("Skiing"));
+        expectedResult.put("Ava", Arrays.asList("Drawing"));
+        expectedResult.put("Liam", Arrays.asList("Cycling"));
+        expectedResult.put("Noah", Arrays.asList("Traveling"));
+        expectedResult.put("Emma", Arrays.asList("Playing Guitar"));
+        expectedResult.put("Sophia", Arrays.asList("Cooking"));
+
         assertEquals(expectedResult, actualResult);
     }
 
     @Test
     void testFindPersonWithMostHobbies() {
         List<String> actual = hobbies.findPersonWithMostHobbies(testFilePath);
-        List<String> expected = List.of("Sophia");
+        List<String> expected = List.of("Olivia", "Aiden", "Lucas", "Isabella", "Jackson", "Ava", "Liam", "Noah", "Emma", "Sophia");
         assertEquals(expected, actual);
 
     }
@@ -50,7 +60,7 @@ public class HobbiesTest {
     @Test
     void testFindPersonWithLeastHobbies() {
         List<String> actual = hobbies.findPersonWithLeastHobbies(testFilePath);
-        List<String> expected = List.of("Sophia");
+        List<String> expected = List.of("Olivia", "Aiden", "Lucas", "Isabella", "Jackson", "Ava", "Liam", "Noah", "Emma", "Sophia");
         assertEquals(expected, actual);
     }
 
@@ -58,14 +68,14 @@ public class HobbiesTest {
     @Test
     void testFindMostPopularHobby() {
         List<String> actual = hobbies.findMostPopularHobby(testFilePath);
-        List<String> expected = List.of("Traveling");
+        List<String> expected = List.of("Cycling", "Skiing", "Traveling");
         assertEquals(expected, actual);
     }
 
     @Test
     void testFindLeastPopularHobby() {
         List<String> actual = hobbies.findLeastPopularHobby(testFilePath);
-        List<String> expected = List.of("Traveling");
+        List<String> expected = List.of("Drawing", "Playing Guitar", "Cooking", "Hiking");
         assertEquals(expected, actual);
 
     }
