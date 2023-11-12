@@ -1,5 +1,6 @@
 package org.tl;
 
+
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ public class HobbiesTest {
     @BeforeEach
     void run() {
         hobbies = new Hobbies();
-        testFilePath = "src/test/resources/hobbiess.txt";
+        testFilePath = "src/test/resources/hobbies.txt";
     }
 
     @Test
@@ -39,7 +40,7 @@ public class HobbiesTest {
     @Test
     void testFindPersonWithMostHobbies() {
         List<String> actual = hobbies.findPersonWithMostHobbies(testFilePath);
-        List<String> expected = List.of("Olivia");
+        List<String> expected = List.of("Olivia","Noah","Sophia");
         assertEquals(expected, actual);
 
     }
@@ -55,14 +56,14 @@ public class HobbiesTest {
     @Test
     void testFindMostPopularHobby() {
         List<String> actual = hobbies.findMostPopularHobby(testFilePath);
-        List<String> expected = List.of("Yoga", "Dancing");
+        List<String> expected = List.of("Chess", "Dancing");
         assertEquals(expected, actual);
     }
 
     @Test
     void testFindLeastPopularHobby() {
         List<String> actual = hobbies.findLeastPopularHobby(testFilePath);
-        List<String> expected = List.of("Chess", "Photography", "Cycling", "Cooking", "Singing", "Skiing", "Knitting", "Traveling", "Hiking", "Painting");
+        List<String> expected = List.of("Photography", "Cycling", "Cooking", "Singing", "Skiing", "Knitting", "Yoga", "Traveling", "Hiking", "Painting");
         assertEquals(expected, actual);
 
     }
