@@ -36,28 +36,26 @@ public class Hobbies {
      * @return A map where each person's name is associated with a list of their hobbies.
      */
     public Map<String, Set<String>> createDictionary(String filePath) {
-
+        List<String> lines = createListFromFile(filePath);
         Map<String, Set<String>> result = new HashMap<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(":");
-                if (parts.length != 2) {
-                    throw new IllegalArgumentException("Invalid format in the input file");
-                }
-                String name = parts[0];
-                String[] hobbyArray = parts[1].split(",");
-                Set<String> hobbies = new HashSet<>(Arrays.asList(hobbyArray));
-                result.merge(name, hobbies, (existingHobbies, newHobbies) -> {
-                    existingHobbies.addAll(newHobbies);
-                    return existingHobbies;
-                });
+
+        for (String line : lines) {
+            String[] parts = line.split(":");
+            if (parts.length != 2) {
+                throw new IllegalArgumentException("Invalid format in the input file");
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading the input file", e);
+            String name = parts[0];
+            String[] hobbyArray = parts[1].split(",");
+            Set<String> hobbies = new HashSet<>(Arrays.asList(hobbyArray));
+            result.merge(name, hobbies, (existingHobbies, newHobbies) -> {
+                existingHobbies.addAll(newHobbies);
+                return existingHobbies;
+            });
         }
+
         return result;
     }
+
 
     /**
      * Find the person (or people) who have more hobbies than others.
