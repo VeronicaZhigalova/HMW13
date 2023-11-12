@@ -29,27 +29,35 @@ public class Hobbies {
         return lines;
     }
 
-
     /**
      * Create a dictionary of people's hobbies from the given file.
      *
      * @param filePath The path to the file to read.
      * @return A map where each person's name is associated with a list of their hobbies.
      */
-    public Map<String, List<String>> createDictionary(String filePath) {
-        Map<String, List<String>> result = new HashMap<>();
-        List<String> lines = createListFromFile(filePath);
-        for (String line : lines) {
-            String[] parts = line.split(":");
-            String name = parts[0].trim();
-            String[] hobbies = parts[1].split(",");
-            List<String> hobbyList = new ArrayList<>(Arrays.asList(hobbies));
-            result.put(name, hobbyList);
-        }
+    public Map<String, Set<String>> createDictionary(String filePath) {
 
+        Map<String, Set<String>> result = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(":");
+                if (parts.length != 2) {
+                    throw new IllegalArgumentException("Invalid format in the input file");
+                }
+                String name = parts[0];
+                String[] hobbyArray = parts[1].split(",");
+                Set<String> hobbies = new HashSet<>(Arrays.asList(hobbyArray));
+                result.merge(name, hobbies, (existingHobbies, newHobbies) -> {
+                    existingHobbies.addAll(newHobbies);
+                    return existingHobbies;
+                });
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading the input file", e);
+        }
         return result;
     }
-
 
     /**
      * Find the person (or people) who have more hobbies than others.
@@ -58,17 +66,17 @@ public class Hobbies {
      * @return A list of people with the most hobbies.
      */
     public List<String> findPersonWithMostHobbies(String filePath) {
-        Map<String, List<String>> dictionary = createDictionary(filePath);
-        int maxHobbies = 1;
+        Map<String, Set<String>> dictionary = createDictionary(filePath);
+        int maxHobbies = Integer.MIN_VALUE;
         List<String> result = new ArrayList<>();
-        for (String name : dictionary.keySet()) {
-            int hobbiesCount = dictionary.get(name).size();
+        for (Map.Entry<String, Set<String>> entry : dictionary.entrySet()) {
+            int hobbiesCount = entry.getValue().size();
             if (hobbiesCount > maxHobbies) {
                 maxHobbies = hobbiesCount;
                 result.clear();
-                result.add(name);
+                result.add(entry.getKey());
             } else if (hobbiesCount == maxHobbies) {
-                result.add(name);
+                result.add(entry.getKey());
             }
         }
         return result;
@@ -82,17 +90,17 @@ public class Hobbies {
      * @return A list of people with the fewest hobbies.
      */
     public List<String> findPersonWithLeastHobbies(String filePath) {
-        Map<String, List<String>> dictionary = createDictionary(filePath);
-        int minHobbies = 1;
+        Map<String, Set<String>> dictionary = createDictionary(filePath);
+        int minHobbies = Integer.MAX_VALUE;
         List<String> result = new ArrayList<>();
-        for (String name : dictionary.keySet()) {
-            int hobbiesCount = dictionary.get(name).size();
+        for (Map.Entry<String, Set<String>> entry : dictionary.entrySet()) {
+            int hobbiesCount = entry.getValue().size();
             if (hobbiesCount < minHobbies) {
                 minHobbies = hobbiesCount;
                 result.clear();
-                result.add(name);
+                result.add(entry.getKey());
             } else if (hobbiesCount == minHobbies) {
-                result.add(name);
+                result.add(entry.getKey());
             }
         }
         return result;
@@ -107,11 +115,11 @@ public class Hobbies {
      */
     public List<String> findMostPopularHobby(String filePath) {
 
-        Map<String, List<String>> dictionary = createDictionary(filePath);
+        Map<String, Set<String>> dictionary = createDictionary(filePath);
         Map<String, Integer> hobbyCount = new HashMap<>();
 
 
-        for (List<String> hobbies : dictionary.values()) {
+        for (Set<String> hobbies : dictionary.values()) {
             for (String hobby : hobbies) {
                 hobbyCount.put(hobby, hobbyCount.getOrDefault(hobby, 0) + 1);
             }
@@ -144,10 +152,10 @@ public class Hobbies {
      */
     public List<String> findLeastPopularHobby(String filePath) {
 
-        Map<String, List<String>> dictionary = createDictionary(filePath);
+        Map<String, Set<String>> dictionary = createDictionary(filePath);
         Map<String, Integer> hobbyCount = new HashMap<>();
 
-        for (List<String> hobbies : dictionary.values()) {
+        for (Set<String> hobbies : dictionary.values()) {
             for (String hobby : hobbies) {
                 hobbyCount.put(hobby, hobbyCount.getOrDefault(hobby, 0) + 1);
             }
@@ -185,18 +193,19 @@ public class Hobbies {
      * @param fileToWrite Path to the new file with correct data
      */
     public void writeCorrectedDatabase(String filePath, String fileToWrite) {
-        Map<String, List<String>> dictionary = createDictionary(filePath);
+        Map<String, Set<String>> dictionary = createDictionary(filePath);
         try {
             FileWriter fileWriter = new FileWriter(fileToWrite);
 
             StringBuilder database = new StringBuilder();
             database.append("Name, Hobbies\n");
 
-            for (Map.Entry<String, List<String>> entry : dictionary.entrySet()) {
+            for (Map.Entry<String, Set<String>> entry : dictionary.entrySet()) {
                 String name = entry.getKey();
-                List<String> hobbies = entry.getValue();
-                Collections.sort(hobbies);
-                String hobbiesString = String.join(",", hobbies);
+                Set<String> hobbies = entry.getValue();
+                List<String> sortedHobbies = new ArrayList<>(hobbies);
+                Collections.sort(sortedHobbies);
+                String hobbiesString = String.join(",", sortedHobbies);
                 database.append(name).append(",").append(hobbiesString).append("\n");
             }
             fileWriter.write(database.toString());
